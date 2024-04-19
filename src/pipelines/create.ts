@@ -36,7 +36,13 @@ cmd
     const createdPipelines = [];
     for (let i = 0; i < Number(options.pipelines); i++) {
       delete pipeline.metadata!.name;
+      pipeline.metadata!.namespace = options.namespace;
       pipeline.metadata!.generateName = 'pipeline-';
+      pipeline.metadata!.labels = {
+        ...pipeline.metadata!.labels,
+        'loadtest': 'true',
+      };
+
       const createdPipeline = (await apiClient.create(pipeline)).body;
       console.log(colorize.resource(createdPipeline), 'created');
       createdPipelines.push(createdPipeline);
@@ -45,7 +51,13 @@ cmd
     for (let i = 0; i < Number(options.pipelines); i++) {
       const createdPipeline = createdPipelines[i];
       delete pipelineRun.metadata!.name;
+      pipelineRun.metadata!.namespace = options.namespace;
       pipelineRun.metadata!.generateName = createdPipeline.metadata!.name + '-';
+      pipeline.metadata!.labels = {
+        ...pipeline.metadata!.labels,
+        'loadtest': 'true',
+      };
+
       (pipelineRun as any).spec.pipelineRef.name = createdPipeline.metadata!.name;
       for (let i = 0; i < Number(options.pipelineruns); i++) {
         const createdPipelinRun = (await apiClient.create(pipelineRun)).body;

@@ -8,7 +8,7 @@
 
 ### Tekton
 
-####  Pipelines with PipelineRuns
+#### Pipelines with PipelineRuns
 
 ```shell
 ./loadtest pipelines create -p 2 -r 3
@@ -25,4 +25,19 @@ pipelinerun.tekton.dev/pipeline-4mfh9-kjzmc created
 pipelinerun.tekton.dev/pipeline-dtfjz-5zmxr created
 pipelinerun.tekton.dev/pipeline-dtfjz-khm72 created
 pipelinerun.tekton.dev/pipeline-dtfjz-4jbn5 created
+```
+
+```shell
+
+➜ ~/git/openshift-dev-console/loadtests (main) ✗ ./loadtest pipelines delete
+
+Will delete 10 of 30 pipelines and 10 of 100 pipelineruns...
+
+Deleting pipelinerun.tekton.dev/pipeline-6hgkd-6rbv8...
+Deleting pipelinerun.tekton.dev/pipeline-6hgkd-79gld...
+Deleting pipelinerun.tekton.dev/pipeline-6hgkd-8w2jj...
+...
+Deleting pipeline.tekton.dev/pipeline-26747...
+Deleting pipeline.tekton.dev/pipeline-4b6m4...
+...
 ```
