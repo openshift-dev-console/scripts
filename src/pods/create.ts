@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import k8s from '@kubernetes/client-node';
+import k8s, { V1Pod } from '@kubernetes/client-node';
 import { parseFile } from '../utils/parse.js';
 import colorize from '../utils/colorize.js';
 
@@ -15,7 +15,6 @@ cmd
   .option('-n, --namespace <string>', '', 'loadtest')
   .option('-c, --count <number>', '', '10')
   .action(async (options: Options) => {
-
     console.log()
     console.log(`Will create ${colorize.number(options.count)} ${colorize.resourcePlural('pods')} ...`);
     console.log()
@@ -23,23 +22,12 @@ cmd
     const kc = new k8s.KubeConfig();
     kc.loadFromDefault();
 
-    const apiClient = k8s.KubernetesObjectApi.makeApiClient(kc);
+    const apiClient = kc.makeApiClient(k8s.CoreV1Api);
 
-    const pod = (await parseFile(apiClient, './src/pods/pod.yaml'))[0];
-
-    pod.metadata = {
-      ...pod.metadata,
-      namespace :options.namespace,
-      name: undefined,
-      generateName: pod.metadata!.name + '-',
-      labels: {
-        ...pod.metadata!.labels,
-        'loadtest': 'true',
-      },
-    };
+    const pod = (await parseFile('./src/pods/pod.yaml'))[0] as V1Pod;
 
     for (let i = 0; i < Number(options.count); i++) {
-      const createdPod = (await apiClient.create(pod)).body;
+      const createdPod = (await apiClient.createNamespacedPod(options.namespace, pod)).body;
       console.log(colorize.resource(createdPod), 'created');
     }
   });

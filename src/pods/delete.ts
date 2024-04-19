@@ -7,29 +7,26 @@ import log from '../utils/log.js';
 interface Options {
   all: boolean;
   namespace: string;
-  pipelines: string;
-  pipelineruns: string;
+  count: string;
 }
 
 const cmd = new Command();
 
 cmd
   .name('delete')
-  .option('-a, --all', 'delete all pipelines and pipelineruns')
+  .option('-a, --all')
   .option('-n, --namespace <string>', '', 'loadtest')
   .option('-c, --count <number>', '', '10')
   .action(async (options: Options) => {
     const kc = new k8s.KubeConfig();
     kc.loadFromDefault();
 
-    const apiClient = k8s.KubernetesObjectApi.makeApiClient(kc);
+    const apiClient = kc.makeApiClient(k8s.CoreV1Api);
 
     const labelSelector = querystring.encode({
       'loadtest': 'true',
     });
-    const pods = await apiClient.list(
-      'v1',
-      'Pod',
+    const pods = await apiClient.listNamespacedPod(
       options.namespace,
       undefined,
       undefined,
@@ -39,18 +36,18 @@ cmd
     );
 
     const found = pods.body.items.length;
-    const deleteCount = options.all ? found : Math.min(found, Number(options.pipelines));
+    const deleteCount = options.all ? found : Math.min(found, Number(options.count));
 
     log()
     log(`
       Will delete ${options.all ? 'ALL ' : ''}
-      ${colorize.number(deleteCount)} of ${colorize.number(found)} ${colorize.resourcePlural('pipelines')}...
+      ${colorize.number(deleteCount)} of ${colorize.number(found)} ${colorize.resourcePlural('pods')}...
     `);
     log();
 
     for (const pod of pods.body.items.slice(0, deleteCount)) {
-      console.log(`Deleting ${colorize.resource(pod)}...`);
-      await apiClient.delete(pod);
+      console.log(`Deleting ${colorize.resourcePlural('pods')}...`);
+      await apiClient.deleteNamespacedPod(pod.metadata!.name!, pod.metadata!.namespace!);
     }
   });
 

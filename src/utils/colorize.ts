@@ -1,13 +1,14 @@
 import k8s from '@kubernetes/client-node';
 import chalk from 'chalk';
-import { getPlural } from './strings.js';
+import { getSingular } from './strings.js';
 
 const colorize = {
   number: chalk.green,
+  resourceSingular: chalk.blueBright,
   resourcePlural: chalk.blueBright,
   resourceName: chalk.yellowBright,
   resource: (object: k8s.KubernetesObject) =>
-    colorize.resourcePlural(getPlural(object)) + '/' +
+    colorize.resourceSingular(getSingular(object)) + '/' +
     colorize.resourceName(object.metadata?.name),
 };
 

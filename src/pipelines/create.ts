@@ -30,8 +30,8 @@ cmd
 
     await applyFile(apiClient, './src/pipelines/tasks.yaml');
 
-    const pipeline = (await parseFile(apiClient, './src/pipelines/pipeline.yaml'))[0];
-    const pipelineRun = (await parseFile(apiClient, './src/pipelines/pipelinerun.yaml'))[0];
+    const pipeline = (await parseFile('./src/pipelines/pipeline.yaml'))[0];
+    const pipelineRun = (await parseFile('./src/pipelines/pipelinerun.yaml'))[0];
 
     const createdPipelines = [];
     for (let i = 0; i < Number(options.pipelines); i++) {

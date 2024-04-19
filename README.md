@@ -6,9 +6,29 @@
 
 ## Commands
 
-### Tekton
+### Pods
 
-#### Pipelines with PipelineRuns
+```shell
+./loadtest pods create -c 3 
+
+Will create 3 pods ...
+
+pod/nginx-rzv2x created
+pod/nginx-gdwsq created
+pod/nginx-jmdpd created
+```
+
+```shell
+./loadtest pods delete -c 3
+
+Will delete 3 of 189 pods...
+
+Deleting pods...
+Deleting pods...
+Deleting pods...
+```
+
+### Tekton
 
 ```shell
 ./loadtest pipelines create -p 2 -r 3
