@@ -53,8 +53,8 @@ cmd
       delete pipelineRun.metadata!.name;
       pipelineRun.metadata!.namespace = options.namespace;
       pipelineRun.metadata!.generateName = createdPipeline.metadata!.name + '-';
-      pipeline.metadata!.labels = {
-        ...pipeline.metadata!.labels,
+      pipelineRun.metadata!.labels = {
+        ...pipelineRun.metadata!.labels,
         'loadtest': 'true',
       };
 
