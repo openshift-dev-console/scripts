@@ -46,7 +46,7 @@ cmd
     log();
 
     for (const pod of pods.body.items.slice(0, deleteCount)) {
-      console.log(`Deleting ${colorize.resourcePlural('pods')}...`);
+      console.log(`Deleting ${colorize.resourceSingular('pod')}/${colorize.resourceName(pod.metadata!.name)}...`);
       await apiClient.deleteNamespacedPod(pod.metadata!.name!, pod.metadata!.namespace!);
     }
   });
