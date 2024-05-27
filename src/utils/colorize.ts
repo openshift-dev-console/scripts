@@ -10,6 +10,10 @@ const colorize = {
   resource: (object: k8s.KubernetesObject) =>
     colorize.resourceSingular(getSingular(object)) + '/' +
     colorize.resourceName(object.metadata?.name),
+
+  success: chalk.greenBright,
+  warning: chalk.yellowBright,
+  failure: chalk.redBright,
 };
 
 export default colorize;
