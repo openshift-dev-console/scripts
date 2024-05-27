@@ -6,8 +6,8 @@ import { default as pods } from './pods/index.js';
 const cmd = new Command();
 
 cmd
-  .name('loadtest')
-  .description('CLI to create a bunch of kubernetes resources');
+  .name('odc')
+  .description('CLI to create or modify Kubernetes/OpenShift/ODC resources');
 
 cmd.addCommand(pipelines);
 cmd.addCommand(pods);

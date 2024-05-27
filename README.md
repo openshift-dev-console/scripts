@@ -1,15 +1,16 @@
-# CLI to create a bunch of kubernetes resources
+# CLI to create or modify Kubernetes/OpenShift/ODC resources
 
 ## Requirements
 
-* Node.js 20 or newer, Deno and Bun but might work as well.
+* Node.js 20 or newer
+* Deno and Bun might work as well (untested, feel free to give it a try)
 
 ## Commands
 
 ### Pods
 
 ```shell
-./loadtest pods create -c 3 
+./odc pods create -c 3 
 
 Will create 3 pods ...
 
@@ -19,7 +20,7 @@ pod/nginx-jmdpd created
 ```
 
 ```shell
-./loadtest pods delete -c 3
+./odc pods delete -c 3
 
 Will delete 3 of 140 pods...
 
@@ -31,7 +32,7 @@ Deleting pod/nginx-52tft...
 ### Tekton
 
 ```shell
-./loadtest pipelines create -p 2 -r 3
+./odc pipelines create -p 2 -r 3
 
 Will create 2 pipelines with 3 pipelineruns...
 
@@ -49,7 +50,7 @@ pipelinerun.tekton.dev/pipeline-dtfjz-4jbn5 created
 
 ```shell
 
-➜ ~/git/openshift-dev-console/loadtests (main) ✗ ./loadtest pipelines delete
+➜ ~/git/openshift-dev-console/scripts (main) ✗ ./odc pipelines delete
 
 Will delete 10 of 30 pipelines and 10 of 100 pipelineruns...
 
