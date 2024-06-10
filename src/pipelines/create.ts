@@ -28,8 +28,19 @@ cmd
 
     const apiClient = k8s.KubernetesObjectApi.makeApiClient(kc);
 
-    await applyFile(apiClient, './src/pipelines/tasks.yaml');
-
+    // Update task.yaml with the namespace
+    const tasks = await parseFile('./src/pipelines/tasks.yaml');
+    for (const task of tasks) {
+      try {
+        task.metadata!.namespace = options.namespace;
+        const createdTask = (await apiClient.create(task)).body;
+        console.log(colorize.resource(createdTask), 'created');
+      } 
+      catch (error) {
+        console.error(`Failed to create ${colorize.resource(task)}:`, error);
+      }
+    }
+        
     const pipeline = (await parseFile('./src/pipelines/pipeline.yaml'))[0];
     const pipelineRun = (await parseFile('./src/pipelines/pipelinerun.yaml'))[0];
 
@@ -56,6 +67,7 @@ cmd
       pipelineRun.metadata!.labels = {
         ...pipelineRun.metadata!.labels,
         'loadtest': 'true',
+        'tekton.dev/pipeline': createdPipeline.metadata!.name || ''
       };
 
       (pipelineRun as any).spec.pipelineRef.name = createdPipeline.metadata!.name;
